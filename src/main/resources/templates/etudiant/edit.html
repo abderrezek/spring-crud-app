@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymleaf.org">
+	<head th:replace="base :: common_header(~{::title}, ~{})">
+		<meta charset="utf-8">
+		<title>Modifier un etudiant</title>
+		
+	</head>
+	<body th:replace="base :: common_body(~{::content}, ~{})">
+	
+		<div th:fragment="content">
+			<p>
+				<a th:href="@{/etudiants}">Reteur</a>
+			</p>
+			<h1>Modifier un etudiant</h1>
+			
+			<div th:if="${ etudiantForm.id != null }">
+				<form th:object="${etudiantForm}" action="#" th:action="@{/etudiants/modifier}" method="post" class="needs-validation">
+					<input type="hidden" th:field="*{id}">
+					
+					<div class="mb-3 row">
+						<div class="col-md-6">
+					  		<label for="nom" class="form-label">Nom</label>
+					  		<input type="text" name="nom" class="form-control" id="nom" th:field="*{nom}" th:errorclass="is-invalid">
+					  		<div class="invalid-feedback" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+						</div>
+						<div class="col-md-6">
+					  		<label for="prenom" class="form-label">Prénom</label>
+					  		<input type="text" name="prenom" class="form-control" id="prenom" th:field="*{prenom}" th:errorclass="is-invalid">
+					  		<div class="invalid-feedback" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+						</div>
+					</div>
+					
+					<div class="mb-3 row">
+						<div class="col-md-6">
+					  		<label for="dateNaissance" class="form-label">Date de naissance</label>
+					  		<input type="date" name="dateNaissance" class="form-control" id="dateNaissance" th:field="*{dateNaissance}" th:errorclass="is-invalid">
+					  		<div class="invalid-feedback" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}"></div>
+						</div>
+						<div class="col-md-6">
+					  		<label for="lieuNaissance" class="form-label">Lieu de naissance</label>
+					  		<input type="text" name="lieuNaissance" class="form-control" id="lieuNaissance" th:field="*{lieuNaissance}" th:errorclass="is-invalid">
+					  		<div class="invalid-feedback" th:if="${#fields.hasErrors('lieuNaissance')}" th:errors="*{lieuNaissance}"></div>
+						</div>
+					</div>
+					
+					<div class="mb-3">
+				  		<label for="sexe" class="form-label">Sexe</label>
+				  		<select class="form-select" th:field="*{sexe}" th:errorclass="is-invalid">
+							<option th:value="0">Homme</option>
+							<option th:value="1">Femme</option>
+						</select>
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('sexe')}" th:errors="*{sexe}"></div>
+					</div>
+					
+					<button type="submit" class="btn btn-primary">Ajouter</button>
+				</form>
+			</div>
+			
+			<div th:unless="${ etudiantForm.id != null }">
+				<h2>Etudiant n'exist pas</h2>
+			</div>
+		</div>
+		
+	</body>
+</html>

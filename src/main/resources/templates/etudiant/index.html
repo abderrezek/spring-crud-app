@@ -1,0 +1,133 @@
+<html xmlns:th="http://www.thymleaf.org">
+	<head th:replace="base :: common_header(~{::title}, ~{})">
+		<meta charset="utf-8">
+		<title>Etudiant</title>
+		
+	</head>
+	<body th:replace="base :: common_body(~{::content}, ~{::script})">
+	
+		<div th:fragment="content">
+			<h1>Etudiant</h1>
+			
+			<div th:if="${msgSuccess != null}" th:text="${msgSuccess}" class="alert alert-success">
+				success
+			</div>
+			
+			<div class="my-3 d-flex align-items-center justify-content-between">
+				<a th:href="@{/etudiants/ajouter}" class="btn btn-primary">Ajouter</a>
+				
+
+				<form th:action="@{/etudiants}" method="get" class="d-flex justify-content-center align-items-center">
+					<input name="q" th:value="${q}" type="text" class="form-control">
+					<button type="submit" class="btn btn-primary">Rechercher</button>
+				</form>
+			</div>
+			
+			<div th:if="${ ! listEtudiants.isEmpty() }">
+				<table class="table table-sm table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th>Date de naissance</th>
+							<th>Lieu de naissance</th>
+							<th>Sexe</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="et : ${listEtudiants}">
+							<td th:text="${et.nom}"></td>
+							<td th:text="${et.prenom}"></td>
+							<td th:text="${et.dateNaissance}"></td>
+							<td th:text="${et.lieuNaissance}"></td>
+							<td th:text="${et.sexe}"></td>
+							<td>
+								<a
+									th:href="@{/etudiants/modifier/{nom}-{prenom}(nom=${et.nom},prenom=${et.prenom})}"
+									class="btn btn-info btn-sm"
+								>Modifier</a>
+								<button
+									th:onclick="|deleteModal(${et.id})|"
+									class="btn btn-danger btn-sm"
+									type="button"
+								>Supprimer</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- Modal delete -->
+				<div class="modal fade" id="modalDelete" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Supprimer</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">Voulez-vous le supprimer</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal">Fermer</button>
+								<form method="post" action="#" th:action="@{/etudiants/supprimer}">
+									<input id="id" name="id" type="hidden" />													
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="d-flex align-items-center justify-content-between">
+					<div>
+						<select
+							th:onchange="'window.location.href = \'' + @{/etudiants} + '?size=\' + this.value '"
+							class="form-select form-select-sm"
+						>
+							<option th:selected="${size==5}" value="5">05</option>
+							<option th:selected="${size==10}" value="10">10</option>
+							<option th:selected="${size==15}" value="15">15</option>
+						</select>
+					</div>
+				
+					<div class="flex-grow-1">
+						<div class="d-flex align-items-center justify-content-center">
+						  <ul class="pagination mb-0">
+						  	<!-- previous page -->
+						  	<li th:if="${ isPrev }" class="page-item">
+						  		<a class="page-link" th:href="@{/etudiants(page=${page - 1},q=${q})}">Previous</a>
+					  		</li>
+						  	<li th:unless="${ isPrev }" class="page-item disabled"><span class="page-link">Previous</span></li>
+							
+							<!-- pages -->
+							<li th:class="|${status.index == page ? 'active' : ''} page-item|" th:each="p, status : ${totalPages}">
+								<a
+									th:unless="${status.index == page}"
+									th:href="@{/etudiants(page=${status.index},q=${q})}"
+									th:text="${status.count}"
+									class="page-link"
+								></a>
+								<span th:if="${status.index == page}" th:text="${status.count}" class="page-link"></span>
+							</li>
+							
+							<!-- next pages -->
+						    <li th:if="${ isNext }" class="page-item">
+						  		<a class="page-link" th:href="@{/etudiants(page=${page + 1},q=${q})}">Next</a>
+					  		</li>
+						  	<li th:unless="${ isNext }" class="page-item disabled"><span class="page-link">Next</span></li>
+						  </ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div th:if="${ listEtudiants.isEmpty() }">
+				<h2>Aucun Etudiant</h2>
+			</div>
+		</div>
+		
+		<script src="/js/main.js"></script>
+		
+	</body>
+</html>

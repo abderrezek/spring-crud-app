@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymleaf.org">
+	<head th:replace="base :: common_header(~{::title}, ~{})">
+	
+		<title>Page not found</title>
+		
+	</head>
+	<body th:replace="base :: common_body(~{::content}, ~{})">
+	
+		<div th:fragment="content">
+			<h1 class="text-center mt-4">404 Not Found</h1>
+		</div>
+		
+	</body>
+</html>
